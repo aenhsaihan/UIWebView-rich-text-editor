@@ -14,6 +14,7 @@
 		B2A8DD871A5D8AF60039A264 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2A8DD861A5D8AF60039A264 /* Images.xcassets */; };
 		B2A8DD8A1A5D8AF60039A264 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2A8DD881A5D8AF60039A264 /* LaunchScreen.xib */; };
 		B2A8DD961A5D8AF60039A264 /* RichTextEditorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A8DD951A5D8AF60039A264 /* RichTextEditorTests.m */; };
+		B2A8DDA21A5D90E10039A264 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = B2A8DDA11A5D90E10039A264 /* index.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		B2A8DD8F1A5D8AF60039A264 /* RichTextEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RichTextEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2A8DD941A5D8AF60039A264 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B2A8DD951A5D8AF60039A264 /* RichTextEditorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RichTextEditorTests.m; sourceTree = "<group>"; };
+		B2A8DDA11A5D90E10039A264 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = index.html; path = ../index.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 				B2A8DD801A5D8AF60039A264 /* ViewController.h */,
 				B2A8DD811A5D8AF60039A264 /* ViewController.m */,
 				B2A8DD831A5D8AF60039A264 /* Main.storyboard */,
+				B2A8DDA11A5D90E10039A264 /* index.html */,
 				B2A8DD861A5D8AF60039A264 /* Images.xcassets */,
 				B2A8DD881A5D8AF60039A264 /* LaunchScreen.xib */,
 				B2A8DD791A5D8AF60039A264 /* Supporting Files */,
@@ -200,6 +203,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2A8DD851A5D8AF60039A264 /* Main.storyboard in Resources */,
+				B2A8DDA21A5D90E10039A264 /* index.html in Resources */,
 				B2A8DD8A1A5D8AF60039A264 /* LaunchScreen.xib in Resources */,
 				B2A8DD871A5D8AF60039A264 /* Images.xcassets in Resources */,
 			);
@@ -346,6 +350,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = RichTextEditor/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -356,6 +361,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = RichTextEditor/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
