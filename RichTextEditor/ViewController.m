@@ -118,6 +118,9 @@
     
     [items addObjectsFromArray:@[undo, redo]];
     
+    UIBarButtonItem *insertPhoto = [[UIBarButtonItem alloc] initWithTitle:@"Photo+" style:UIBarButtonItemStyleBordered target:self action:@selector(insertPhoto:)];
+    [items addObject:insertPhoto];
+    
     
     if (self.currentFontSize != size || ![self.currentForeColor isEqualToString:foreColor] || ![self.currentFontName isEqualToString:fontName] || self.currentUndoStatus != undoAvailable || self.currentRedoStatus != redoAvailable || sender == self) {
         self.navigationItem.leftBarButtonItems = items;
@@ -128,6 +131,41 @@
         self.currentRedoStatus = redoAvailable;
     }
 
+}
+
+#pragma mark - Insert photo
+
+-(void)insertPhoto:(id)sender
+{
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    imagePicker.delegate = self;
+    
+    UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
+    [popover presentPopoverFromBarButtonItem:(UIBarButtonItem *)sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    self.imagePickerPopover = popover;
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    static int i = 0;
+    
+    // Obtain the path to save to
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *imagePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"photo%i.png", i]];
+    
+    // Extract image from the picker and save it
+    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    if ([mediaType isEqualToString:@"public.image"]) {
+        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        NSData *data = UIImagePNGRepresentation(image);
+        [data writeToFile:imagePath atomically:YES];
+    }
+    
+    [self.webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.execCommand('insertImage', false, '%@')", imagePath]];
+    [self.imagePickerPopover dismissPopoverAnimated:YES];
+    i++;
 }
 
 #pragma mark - Undo and Redo

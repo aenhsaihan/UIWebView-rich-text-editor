@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController <UIActionSheetDelegate>
+@interface ViewController : UIViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (nonatomic, strong) NSTimer *timer;
@@ -20,5 +20,6 @@
 @property (nonatomic, strong) NSString *currentFontName;
 @property (nonatomic) BOOL currentUndoStatus;
 @property (nonatomic) BOOL currentRedoStatus;
+@property (nonatomic, strong) UIPopoverController *imagePickerPopover;
 @end
 
