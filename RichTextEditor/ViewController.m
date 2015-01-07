@@ -34,18 +34,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
- This is a bit more complicated compared to our other actions as we have to check the current color of the selected text to see whether or not to highlight it or to remove the highlight. Firstly we get the current value of the background color, we then check to see if it’s equal to ‘rgb(255, 255, 0)’ which is the rgb equivalent of yellow and if so we reset the color to white else we highlight the selection by setting the background color to yellow.
- */
--(void)highlight
-{
-    NSString *currentColor = [self.webView stringByEvaluatingJavaScriptFromString:@"document.queryCommandValue('backColor')"];
-    if ([currentColor isEqualToString:@"rgb(255, 255, 0)"]) {
-        [self.webView stringByEvaluatingJavaScriptFromString:@"document.execCommand('backColor', false, 'white')"];
-    } else {
-        [self.webView stringByEvaluatingJavaScriptFromString:@"document.execCommand('backColor', false, 'yellow')"];
-    }
-}
 
 -(void)checkSelection:(id)sender
 {
@@ -114,14 +102,63 @@
     
     [items addObject:fontPicker];
     
-    if (self.currentFontSize != size || ![self.currentForeColor isEqualToString:foreColor] || ![self.currentFontName isEqualToString:fontName] || sender == self) {
+    UIBarButtonItem *undo = [[UIBarButtonItem alloc] initWithTitle:@"Undo" style:UIBarButtonItemStyleBordered target:self action:@selector(undo)];
+    UIBarButtonItem *redo = [[UIBarButtonItem alloc] initWithTitle:@"Redo" style:UIBarButtonItemStyleBordered target:self action:@selector(redo)];
+    
+    BOOL undoAvailable = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.queryCommandEnabled('undo')"] boolValue];
+    BOOL redoAvailable = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.queryCommandEnabled('redo')"] boolValue];
+    
+    if (!undoAvailable) {
+        [undo setEnabled:NO];
+    }
+    
+    if (!redoAvailable) {
+        [redo setEnabled:NO];
+    }
+    
+    [items addObjectsFromArray:@[undo, redo]];
+    
+    
+    if (self.currentFontSize != size || ![self.currentForeColor isEqualToString:foreColor] || ![self.currentFontName isEqualToString:fontName] || self.currentUndoStatus != undoAvailable || self.currentRedoStatus != redoAvailable || sender == self) {
         self.navigationItem.leftBarButtonItems = items;
         self.currentFontSize = size;
         self.currentForeColor = foreColor;
         self.currentFontName = fontName;
+        self.currentUndoStatus = undoAvailable;
+        self.currentRedoStatus = redoAvailable;
     }
 
 }
+
+#pragma mark - Undo and Redo
+
+-(void)undo
+{
+    [self.webView stringByEvaluatingJavaScriptFromString:@"document.execCommand('undo')"];
+}
+
+-(void)redo
+{
+    [self.webView stringByEvaluatingJavaScriptFromString:@"document.execCommand('redo')"];
+}
+
+#pragma mark - Highlight
+
+/*
+ This is a bit more complicated compared to our other actions as we have to check the current color of the selected text to see whether or not to highlight it or to remove the highlight. Firstly we get the current value of the background color, we then check to see if it’s equal to ‘rgb(255, 255, 0)’ which is the rgb equivalent of yellow and if so we reset the color to white else we highlight the selection by setting the background color to yellow.
+ */
+-(void)highlight
+{
+    NSString *currentColor = [self.webView stringByEvaluatingJavaScriptFromString:@"document.queryCommandValue('backColor')"];
+    if ([currentColor isEqualToString:@"rgb(255, 255, 0)"]) {
+        [self.webView stringByEvaluatingJavaScriptFromString:@"document.execCommand('backColor', false, 'white')"];
+    } else {
+        [self.webView stringByEvaluatingJavaScriptFromString:@"document.execCommand('backColor', false, 'yellow')"];
+    }
+}
+
+
+#pragma mark - Font Color and Size
 
 -(void)displayFontColorPicker:(id)sender
 {
@@ -185,6 +222,8 @@
     
     self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(checkSelection:) userInfo:nil repeats:YES];
 }
+
+#pragma mark - Bold, Italic, Underline
 
 -(void)bold {
     [self.webView stringByEvaluatingJavaScriptFromString:@"document.execCommand(\"Bold\")"];

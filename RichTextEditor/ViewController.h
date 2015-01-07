@@ -18,5 +18,7 @@
 @property (nonatomic) int currentFontSize;
 @property (nonatomic, strong) NSString *currentForeColor;
 @property (nonatomic, strong) NSString *currentFontName;
+@property (nonatomic) BOOL currentUndoStatus;
+@property (nonatomic) BOOL currentRedoStatus;
 @end
 
