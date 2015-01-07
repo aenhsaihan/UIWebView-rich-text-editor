@@ -11,6 +11,9 @@
 @interface ViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
-
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic) BOOL currentBoldStatus;
+@property (nonatomic) BOOL currentItalicStatus;
+@property (nonatomic) BOOL currentUnderlineStatus;
 @end
 
