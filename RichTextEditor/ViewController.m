@@ -91,11 +91,76 @@
     
     [items addObjectsFromArray:@[plusFontSize, minusFontSize]];
     
-    if (self.currentFontSize != size || sender == self) {
+    // Font Color Picker
+    
+    UIBarButtonItem *fontColorPicker = [[UIBarButtonItem alloc] initWithTitle:@"Color" style:UIBarButtonItemStyleBordered target:self action:@selector(displayFontColorPicker:)];
+    
+    NSString *foreColor = [self.webView stringByEvaluatingJavaScriptFromString:@"document.queryCommandValue('foreColor')"];
+    UIColor *color = [self colorFromRGBValue:foreColor];
+    if (color) {
+        [fontColorPicker setTintColor:color];
+    }
+    
+    [items addObject:fontColorPicker];
+    
+    // Font Picker
+    UIBarButtonItem *fontPicker = [[UIBarButtonItem alloc] initWithTitle:@"Font" style:UIBarButtonItemStyleBordered target:self action:@selector(displayFontPicker:)];
+    
+    NSString *fontName = [self.webView stringByEvaluatingJavaScriptFromString:@"document.queryCommandValue('fontName')"];
+    UIFont *font = [UIFont fontWithName:fontName size:[UIFont systemFontSize]];
+    if (font) {
+        [fontPicker setTitleTextAttributes:[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName] forState:UIControlStateNormal];
+    }
+    
+    [items addObject:fontPicker];
+    
+    if (self.currentFontSize != size || ![self.currentForeColor isEqualToString:foreColor] || ![self.currentFontName isEqualToString:fontName] || sender == self) {
         self.navigationItem.leftBarButtonItems = items;
         self.currentFontSize = size;
+        self.currentForeColor = foreColor;
+        self.currentFontName = fontName;
     }
 
+}
+
+-(void)displayFontColorPicker:(id)sender
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Select a font color" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Blue", @"Yellow", @"Green", @"Red", @"Orange", nil];
+    [actionSheet showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
+}
+
+- (void)displayFontPicker:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Select a font" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Helvetica", @"Courier", @"Arial", @"Zapfino", @"Verdana", nil];
+    [actionSheet showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
+}
+
+- (UIColor *)colorFromRGBValue:(NSString *)rgb { // General format is 'rgb(red, green, blue)'
+    if ([rgb rangeOfString:@"rgb"].location == NSNotFound)
+        return nil;
+    
+    NSMutableString *mutableCopy = [rgb mutableCopy];
+    [mutableCopy replaceCharactersInRange:NSMakeRange(0, 4) withString:@""];
+    [mutableCopy replaceCharactersInRange:NSMakeRange(mutableCopy.length-1, 1) withString:@""];
+    
+    NSArray *components = [mutableCopy componentsSeparatedByString:@","];
+    int red = [[components objectAtIndex:0] intValue];
+    int green = [[components objectAtIndex:1] intValue];
+    int blue = [[components objectAtIndex:2] intValue];
+    
+    UIColor *retVal = [UIColor colorWithRed:red/255.0 green:green/255.0 blue:blue/255.0 alpha:1.0];
+    return retVal;
+}
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString *selectedButtonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
+    selectedButtonTitle = [selectedButtonTitle lowercaseString];
+    
+    if ([actionSheet.title isEqualToString:@"Select a font"]) {
+        [self.webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.execCommand('fontName', false, '%@')", selectedButtonTitle]];
+    } else {
+        [self.webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.execCommand('foreColor', false, '%@')", selectedButtonTitle]];
+    }
 }
 
 /*
