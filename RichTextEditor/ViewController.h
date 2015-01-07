@@ -15,5 +15,8 @@
 @property (nonatomic) BOOL currentBoldStatus;
 @property (nonatomic) BOOL currentItalicStatus;
 @property (nonatomic) BOOL currentUnderlineStatus;
+@property (nonatomic) int currentFontSize;
+@property (nonatomic, strong) NSString *currentForeColor;
+@property (nonatomic, strong) NSString *currentFontName;
 @end
 

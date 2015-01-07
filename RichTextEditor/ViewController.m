@@ -76,6 +76,49 @@
     BOOL isYellow = [currentColor isEqualToString:@"rgb(255, 255, 0)"];
     UIMenuItem *highlightMenuItem = [[UIMenuItem alloc] initWithTitle:(isYellow) ? @"De-Highlight" : @"Highlight" action:@selector(highlight)];
     [[UIMenuController sharedMenuController] setMenuItems:[NSArray arrayWithObject:highlightMenuItem]];
+    
+    [items removeAllObjects];
+    
+    UIBarButtonItem *plusFontSize = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(fontSizeUp)];
+    UIBarButtonItem *minusFontSize = [[UIBarButtonItem alloc] initWithTitle:@"-" style:UIBarButtonItemStyleBordered target:self action:@selector(fontSizeDown)];
+    
+    int size = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.queryCommandValue('fontSize')"] intValue];
+    if (size == 7) {
+        plusFontSize.enabled = NO;
+    } else if (size == 1) {
+        minusFontSize.enabled = NO;
+    }
+    
+    [items addObjectsFromArray:@[plusFontSize, minusFontSize]];
+    
+    if (self.currentFontSize != size || sender == self) {
+        self.navigationItem.leftBarButtonItems = items;
+        self.currentFontSize = size;
+    }
+
+}
+
+/*
+ Before we add our bar button items and everything else we need to add some global variables to keep the status of our font size, font color and font so that we only update the the bar button items when we need to. Why do we need to do this you might ask, the reason behind it is if you update them every 0.1 seconds then the action of the bar button item is never sent so it renders them useless.
+ */
+-(void)fontSizeUp
+{
+    [self.timer invalidate];
+    
+    int size = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.queryCommandValue('fontSize')"] intValue] + 1;
+    [self.webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.execCommand('fontSize', false, '%i')", size]];
+    
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(checkSelection:) userInfo:nil repeats:YES];
+}
+
+-(void)fontSizeDown
+{
+    [self.timer invalidate];
+    
+    int size = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.queryCommandValue('fontSize')"] intValue] - 1;
+    [self.webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.execCommand('fontSize', false, '%i')", size]];
+    
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(checkSelection:) userInfo:nil repeats:YES];
 }
 
 -(void)bold {
