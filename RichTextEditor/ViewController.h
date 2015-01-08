@@ -21,5 +21,6 @@
 @property (nonatomic) BOOL currentUndoStatus;
 @property (nonatomic) BOOL currentRedoStatus;
 @property (nonatomic, strong) UIPopoverController *imagePickerPopover;
+@property (nonatomic) CGPoint initialPointOfImage;
 @end
 

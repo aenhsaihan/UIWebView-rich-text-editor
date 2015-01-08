@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "RTEGestureRecognizer.h"
 
 @interface ViewController ()
 
@@ -27,6 +28,41 @@
     
     UIMenuItem *highlightMenuItem = [[UIMenuItem alloc] initWithTitle:@"Highlight" action:@selector(highlight)];
     [[UIMenuController sharedMenuController] setMenuItems:[NSArray arrayWithObject:highlightMenuItem]];
+    
+    RTEGestureRecognizer *tapInterceptor = [[RTEGestureRecognizer alloc] init];
+    tapInterceptor.touchesBeganCallback = ^(NSSet *touches, UIEvent *event) {
+        // Here we just get the location of the touch
+        UITouch *touch = [[event allTouches] anyObject];
+        CGPoint touchPoint = [touch locationInView:self.view];
+        
+        // What we do here is to get the element that is located at the touch point to see whether or not it is an image
+        NSString *javascript = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).toString()", touchPoint.x, touchPoint.y];
+        NSString *elementAtPoint = [self.webView stringByEvaluatingJavaScriptFromString:javascript];
+        
+        if ([elementAtPoint rangeOfString:@"Image"].location != NSNotFound) {
+            // We set the inital point of the image for use latter on when we actually move it
+            self.initialPointOfImage = touchPoint;
+            // In order to make moving the image easy we must disable scrolling otherwise the view will just scroll and prevent fully detecting movement on the image.
+            self.webView.scrollView.scrollEnabled = NO;
+        } else {
+            self.initialPointOfImage = CGPointZero;
+        }
+    };
+    
+    tapInterceptor.touchesEndedCallback = ^(NSSet *touches, UIEvent *event) {
+        // Let's get the finished touch point
+        UITouch *touch = [[event allTouches] anyObject];
+        CGPoint touchPoint = [touch locationInView:self.view];
+        
+        // And move that image!
+        NSString *javascript = [NSString stringWithFormat:@"moveImageAtTo(%f, %f, %f, %f)", self.initialPointOfImage.x, self.initialPointOfImage.y, touchPoint.x, touchPoint.y];
+        [self.webView stringByEvaluatingJavaScriptFromString:javascript];
+        
+        // All done, lets re-enable scrolling
+        self.webView.scrollView.scrollEnabled = YES;
+    };
+    
+    [self.webView.scrollView addGestureRecognizer:tapInterceptor];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -15,6 +15,7 @@
 		B2A8DD8A1A5D8AF60039A264 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2A8DD881A5D8AF60039A264 /* LaunchScreen.xib */; };
 		B2A8DD961A5D8AF60039A264 /* RichTextEditorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A8DD951A5D8AF60039A264 /* RichTextEditorTests.m */; };
 		B2A8DDA21A5D90E10039A264 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = B2A8DDA11A5D90E10039A264 /* index.html */; };
+		B2A8DDA51A5E53270039A264 /* RTEGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A8DDA41A5E53270039A264 /* RTEGestureRecognizer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,8 @@
 		B2A8DD941A5D8AF60039A264 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B2A8DD951A5D8AF60039A264 /* RichTextEditorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RichTextEditorTests.m; sourceTree = "<group>"; };
 		B2A8DDA11A5D90E10039A264 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = index.html; path = ../index.html; sourceTree = "<group>"; };
+		B2A8DDA31A5E53270039A264 /* RTEGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTEGestureRecognizer.h; sourceTree = "<group>"; };
+		B2A8DDA41A5E53270039A264 /* RTEGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTEGestureRecognizer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +92,8 @@
 				B2A8DD811A5D8AF60039A264 /* ViewController.m */,
 				B2A8DD831A5D8AF60039A264 /* Main.storyboard */,
 				B2A8DDA11A5D90E10039A264 /* index.html */,
+				B2A8DDA31A5E53270039A264 /* RTEGestureRecognizer.h */,
+				B2A8DDA41A5E53270039A264 /* RTEGestureRecognizer.m */,
 				B2A8DD861A5D8AF60039A264 /* Images.xcassets */,
 				B2A8DD881A5D8AF60039A264 /* LaunchScreen.xib */,
 				B2A8DD791A5D8AF60039A264 /* Supporting Files */,
@@ -226,6 +231,7 @@
 				B2A8DD821A5D8AF60039A264 /* ViewController.m in Sources */,
 				B2A8DD7F1A5D8AF60039A264 /* AppDelegate.m in Sources */,
 				B2A8DD7C1A5D8AF60039A264 /* main.m in Sources */,
+				B2A8DDA51A5E53270039A264 /* RTEGestureRecognizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
